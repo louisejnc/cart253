@@ -7,29 +7,41 @@ Pippin Barr
 Here is a description of this template p5 project.
 **************************************************/
 
-let circleSize = 200 ;
-let backgroundShade = 0;
-let circleY = 200;
+let backgroundShade = 1;
 let circleX = 0;
+let circleY = 250;
+let circleSize = 200;
 let circleSpeed = 2;
-let cicleAcceleration = 0.25;
+
+
+let circle = {
+  x: 0,
+  y: 250,
+  size: 100,
+  speed: 1,
+  fill: 255
+};
 
 // setup()
 //
 // Description of setup() goes here.
 function setup() {
 createCanvas(windowWidth,windowHeight);
-
-
 }
 
 // draw()
 //
 // Description of draw() goes here.
 function draw() {
-  backgroundShade = backgroundShade+1;
   background(backgroundShade);
-  circleX += circleSpeed;
-  circleSpeed += cicleAcceleration;
-  ellipse(circleX,circleY,circleSize);
+  circle.x += circle.speed;
+  circle.x = constrain(circle.x,0,width);
+  
+  circle.fill = map(circle.x,0,width,0,255);
+  fill(circle.fill);
+  ellipse(circle.x, circle.y, circle.size);
+
+  let randomNumber = random()
+
+  console.log(randomNumber);
 }
