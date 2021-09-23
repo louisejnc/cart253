@@ -18,6 +18,14 @@ let bg = {
   b: 255
 }
 
+let square = {
+  x: 180,
+  y: -100,
+  fill: 0,
+  size: 200,
+  speed: 2
+}
+
 let circle = {
   x: 250,
   y: -50,
@@ -41,12 +49,22 @@ function setup() {
 function draw() {
   background(bg.r, bg.g, bg.b);
 
+  //square
+  rectMode(CENTER);
+  square.y += square.speed;
+  square.y = constrain(square.y,-100,400);
+  fill(square.fill);
+  rect(square.x, square.y, square.size);
+
+
   //circle
   ellipseMode(CENTER);
   circle.y += circle.speed;
   circle.y = constrain(circle.y, -50, 450);
   fill(circle.fill);
   ellipse(circle.x, circle.y, circle.size);
+
+
 
 
 
