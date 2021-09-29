@@ -1,22 +1,29 @@
-"use strict";
 
-/**************************************************
-Template p5 project
-Pippin Barr
+let angle=0;
+let rectScale = 0;
 
-Here is a description of this template p5 project.
-**************************************************/
 
-// setup()
-//
-// Description of setup() goes here.
 function setup() {
-
+  createCanvas(500,500);
 }
 
-// draw()
-//
-// Description of draw() goes here.
+
+
 function draw() {
+  background(0);
 
-}
+  push();
+  fill(255,0,0);
+  rectMode(CENTER);
+  translate(width/2,height/2);
+  rotate(angle);
+  scale(rectScale);
+  rect(0,0,100,100);
+  pop();
+
+  angle +=0.01;
+  rectScale+=0.01;
+
+
+
+  }
