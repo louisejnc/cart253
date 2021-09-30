@@ -146,6 +146,8 @@ let user = {
   }
 };
 
+let bonhommeBlanc;
+
 let numStatic = 5000;
 
 let dots = {
@@ -171,8 +173,10 @@ let gameOver = {
 let displayGameOver = false;
 
 function preload(){
-  pixelFont = loadFont('assets/04B_30__.ttf')
+  pixelFont = loadFont('assets/04B_30__.ttf');
+  bonhommeBlanc = loadImage('assets/images/bonhomme.png');
 }
+
 
 
 // Description of setup() goes here.
@@ -248,8 +252,6 @@ function setup() {
   textFont(pixelFont);
   textSize(width/5);
   textAlign(CENTER);
-
-
 
 }
 
@@ -392,8 +394,10 @@ function draw() {
 
 
   // Display User
-  fill(user.fill.r, user.fill.g, user.fill.b);
-  ellipse(user.x, user.y, user.size);
+  // fill(user.fill.r, user.fill.g, user.fill.b);
+  // ellipse(user.x, user.y, user.size);
+  imageMode(CENTER);
+  image(bonhommeBlanc,mouseX,mouseY,100,100);
 
 
   // Check for touching covid 19
