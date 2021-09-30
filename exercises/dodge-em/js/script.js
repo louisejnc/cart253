@@ -1,17 +1,23 @@
 "use strict";
 
 /**************************************************
-Template p5 project
-Pippin Barr
+Dodge Em Exercise
+Louise JEAN-CAMPANA
 
-Here is a description of this template p5 project.
+Game were the user control with his mouse a circle.
+Active user = pink circle
+5triangles = covid, add 1 triangle after another.
+The user have to avoid the triangles.
+
+If they touch a triangle with the circle, they loose the game:
+Screen freeze and show Game Over 
 **************************************************/
-let bg = {
-  r: 151,
-  g: 151,
-  b: 255
-}
 
+//background
+let bg;
+
+//Covid
+//covid1
 let covid1 = {
   x1: -25,
   y1: 235,
@@ -30,11 +36,12 @@ let covid1 = {
   maxSpeed: 7,
   fill: {
     r: 0,
-    g: 26,
+    g: 0,
     b: 255
   }
 };
 
+//covid2
 let displayTriangle2 = false;
 
 let covid2 = {
@@ -55,11 +62,12 @@ let covid2 = {
   maxSpeed: 7,
   fill: {
     r: 0,
-    g: 26,
+    g: 0,
     b: 255
   }
 };
 
+//covid3
 let displayTriangle3 = false;
 
 let covid3 = {
@@ -80,11 +88,12 @@ let covid3 = {
   maxSpeed: 7,
   fill: {
     r: 0,
-    g: 26,
+    g: 0,
     b: 255
   }
 };
 
+//covid4
 let displayTriangle4 = false;
 
 let covid4 = {
@@ -105,11 +114,12 @@ let covid4 = {
   maxSpeed: 7,
   fill: {
     r: 0,
-    g: 26,
+    g: 0,
     b: 255
   }
 };
 
+//covid5
 let displayTriangle5 = false;
 
 let covid5 = {
@@ -130,11 +140,12 @@ let covid5 = {
   maxSpeed: 7,
   fill: {
     r: 0,
-    g: 26,
+    g: 0,
     b: 255
   }
 };
 
+//user
 let user = {
   x: 250,
   y: 250,
@@ -146,8 +157,8 @@ let user = {
   }
 };
 
-let bonhommeBlanc;
 
+//gresillement
 let numStatic = 5000;
 
 let dots = {
@@ -158,6 +169,7 @@ let dots = {
   }
 };
 
+//Game Over
 let pixelFont;
 
 let gameOver = {
@@ -172,17 +184,17 @@ let gameOver = {
 
 let displayGameOver = false;
 
+//Preload font GameOver
 function preload(){
   pixelFont = loadFont('assets/04B_30__.ttf');
-  bonhommeBlanc = loadImage('assets/images/bonhomme.png');
 }
 
 
 
-// Description of setup() goes here.
+// Define covid triangles shape & size + user size
 function setup() {
+  bg = loadImage('assets/images/background.jpg');
   createCanvas(windowWidth,windowHeight);
-
   //Setup covid
   //1st triangle
   covid1.x3 = 0;
@@ -255,17 +267,9 @@ function setup() {
 
 }
 
-// Description of draw() goes here.
+// Display User and covid triangles + movement
 function draw() {
-  background(bg.r, bg.g, bg.b);
-
-  // Display static
-  for( let i = 0; i < numStatic; i++) {
-    let x = random(0,width);
-    let y = random(0,height);
-    stroke(dots.color.r, dots.color.g, dots.color.b);
-    point(x,y);
-  }
+  background(bg);
 
   // Display covid 19
   noStroke()
@@ -394,11 +398,8 @@ function draw() {
 
 
   // Display User
-  // fill(user.fill.r, user.fill.g, user.fill.b);
-  // ellipse(user.x, user.y, user.size);
-  imageMode(CENTER);
-  image(bonhommeBlanc,mouseX,mouseY,100,100);
-
+  fill(user.fill.r, user.fill.g, user.fill.b);
+  ellipse(user.x, user.y, user.size);
 
   // Check for touching covid 19
   //1st triangle
@@ -436,6 +437,15 @@ function draw() {
     displayGameOver = true
   };
 
+  // Display static
+  for( let i = 0; i < numStatic; i++) {
+    let x = random(0,width);
+    let y = random(0,height);
+    stroke(dots.color.r, dots.color.g, dots.color.b);
+    point(x,y);
+  }
+
+
   // Display GameOver
   if(displayGameOver) {
     push();
@@ -460,9 +470,9 @@ function mouseDragged() {
   user.x = mouseX;
   user.y = mouseY;
 }
-
+// User color when active
 function mousePressed() {
-  user.fill.r = 250;
-  user.fill.g = 166;
+  user.fill.r = 255;
+  user.fill.g = 186;
   user.fill.b = 255;
 }
