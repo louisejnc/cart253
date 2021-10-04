@@ -447,17 +447,19 @@ function draw() {
 
   // Display GameOver
   if(displayGameOver) {
+    let fontHeight = width/5;
+
     push();
     fill(gameOver.fill.r,gameOver.fill.g,gameOver.fill.b);
-    textAlign(CENTER);
-    translate(width/2,height/2.3);
+    textAlign(CENTER,CENTER);
+    translate(width/2,height/2-fontHeight/2);
     text('GAME', gameOver.x, gameOver.y);
     pop();
 
     push();
     fill(gameOver.fill.r,gameOver.fill.g,gameOver.fill.b);
-    textAlign(CENTER);
-    translate(width/2,height/1.1);
+    textAlign(CENTER,CENTER);
+    translate(width/2,height/2+fontHeight);
     text('OVER',gameOver.x,gameOver.y);
     pop();
   };
