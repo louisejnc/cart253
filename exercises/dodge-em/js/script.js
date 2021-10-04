@@ -10,7 +10,7 @@ Active user = pink circle
 The user have to avoid the triangles.
 
 If they touch a triangle with the circle, they loose the game:
-Screen freeze and show Game Over 
+Screen freeze and show Game Over
 **************************************************/
 
 //background
@@ -157,7 +157,6 @@ let user = {
   }
 };
 
-
 //gresillement
 let numStatic = 5000;
 
@@ -186,14 +185,14 @@ let displayGameOver = false;
 
 //Preload font GameOver
 function preload(){
-  pixelFont = loadFont('assets/04B_30__.ttf');
+  pixelFont = loadFont('assets/04B_30__.TTF');
+  bg = loadImage('assets/images/background.jpg');
 }
 
 
 
 // Define covid triangles shape & size + user size
 function setup() {
-  bg = loadImage('assets/images/background.jpg');
   createCanvas(windowWidth,windowHeight);
   //Setup covid
   //1st triangle
@@ -458,7 +457,7 @@ function draw() {
     push();
     fill(gameOver.fill.r,gameOver.fill.g,gameOver.fill.b);
     textAlign(CENTER);
-    translate(width/2,height/1.5);
+    translate(width/2,height/1.1);
     text('OVER',gameOver.x,gameOver.y);
     pop();
   };
