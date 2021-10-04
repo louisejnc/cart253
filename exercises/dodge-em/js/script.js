@@ -185,7 +185,7 @@ let displayGameOver = false;
 
 //Preload font GameOver
 function preload(){
-  pixelFont = loadFont('assets/04B_30__.ttf');
+  pixelFont = loadFont('assets/font.ttf');
   bg = loadImage('assets/images/background.jpg');
 }
 
