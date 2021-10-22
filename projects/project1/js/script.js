@@ -2,8 +2,16 @@
 ROUTINE
 Louise Jean-Campana
 
-This is a template. You must fill in the title,
-author, and this description to match your project!
+This project is a simulation of a morning routine.
+
+It begins with a white screen, the user have to move the mouse to the right to show the title screen and start the simulation.
+The user control a white circle with 'me' written in his center. It takes place in a appartment map.
+One Roomate in her room, the other is moving in the kitchen.
+Once the user go talk (circles overlap) to one of them, a sequence of task begins.
+Icons representing different tasks displays on the map.
+The user have to touch them to do them. Once a task is done, the icon is displayed on the upper right corner.
+Once the user have done all of them, the end screen displays.
+The end screen is a black screen, the user have to move its mouse to show 'have a good day :)'.
 */
 
 "use strict";
@@ -36,7 +44,7 @@ let sleepyRoomate = {
   size:50,
   vx:0,
   vy:0,
-  speed:1,
+  speed:0.2,
   fill:{
     r:255,
     g:255,
@@ -111,6 +119,20 @@ let bed = {
   x:0,
   y:0
 }
+let door ={
+  x:0,
+  y:0,
+  x1:0,
+  y1:0,
+  x2:0,
+  y2:0,
+  size:0,
+  fill: {
+    r:139,
+    g:255,
+    b:182
+  }
+}
 
 let routineTitle = {
   fill:{
@@ -134,9 +156,11 @@ let showVaisselle = false;
 let showVaisselleVide = false;
 let showTeeth = false;
 
-let state = `title`; // Can be : title, routine, game over, bravo
+let endGame = false;
+
+let state = `routine`; // Can be : title, routine, win(have a good day)
 /**
-Description of preload
+Preload of the appartment map and tasks icons
 */
 function preload() {
   // plan appt
@@ -154,35 +178,48 @@ function preload() {
 
 
 /**
-Description of setup
+APPARTMENT MAP : Addapt AppttMapSize to windowSize but keep img ratio
+BED : position of the bed for beginning position of the user
+DOOR : position to reach by user for the end of the game
+USER : beginning position and addapt size to ApptMapSize
+ROOMATES : positions and sizes = user
+ICONS : positions and sizes of tasks's icons
 */
 function setup() {
   createCanvas(windowWidth/1.05,windowHeight/1.1);
   setupAppt();
   setupBed();
+  setupDoor();
   setupUser();
   setupRoomates();
 
   setupIcons();
 }
-
 function setupAppt() {
   appt.width = width/1.1;
   appt.height = appt.width/1.95;
 }
-
 function setupBed() {
   // Set up bed in relation to apptImg center
   bed.x = width/2-appt.width/2.05;
   bed.y = appt.height/11.5;
 }
+function setupDoor(){
+  // Set up door in relation to apptImg center
+  door.x1 = -appt.width/22;
+  door.y1 = -appt.height/5.5;
+  door.x2 = -width/2+appt.width/1.81;
+  door.y2 = -appt.height/5.5;
 
+  door.size = -(door.x2-door.x1);
+  door.x = door.size/2;
+  door.y = door.size/2;
+}
 function setupUser() {
   user.x = bed.x;
   user.y = bed.y;
   user.size = width/32;
 }
-
 function setupRoomates(){
   //Sleepy Roomate
   sleepyRoomate.size = user.size;
@@ -193,17 +230,26 @@ function setupRoomates(){
   hungryRoomate.x = appt.width/2.7;
   hungryRoomate.y = appt.height/4;
 }
-
 function setupIcons() {
-  // Shower Icon
+  showerIcon();
+  clothesIcon();
+  dejIcon();
+  vaisselleIcon();
+  vaisselleVideIcon();
+  teethIcon();
+}
+
+// POSITION = SHOWER
+function showerIcon() {
   shower.width = appt.width/25;
   shower.height = shower.width;
   shower.size = shower.width
 
   shower.x = width/2-appt.width/8.35;
   shower.y = -appt.height/6;
-
-  //Clothes Icon
+}
+// POSITION = DRESSER
+function clothesIcon() {
   clothes.width = appt.width/25;
   clothes.height = clothes.width;
   clothes.size = clothes.width
@@ -211,15 +257,18 @@ function setupIcons() {
   clothes.x = appt.width/13;
   clothes.y = appt.height/3.85;
 
-  // Dej Icon
+}
+// POSITION = FRIDGE
+function dejIcon(){
   dej.width = appt.width/25;
   dej.height = dej.width;
   dej.size = dej.width
 
   dej.x = appt.width/2.34;
   dej.y = appt.height/8.6;
-
-  // Vaisselle Icon
+}
+// POSITION = KITCHEN SINK
+function vaisselleIcon(){
   vaisselle.width = appt.width/20;
   vaisselle.height = vaisselle.width;
   vaisselle.size = vaisselle.width
@@ -227,29 +276,36 @@ function setupIcons() {
   vaisselle.x = appt.width/3.085;
   vaisselle.y = appt.height/4.965;
 
-  // Vaisselle Vide Icon
+}
+// POSITION = TASK DONE (upper right corner)
+function vaisselleVideIcon(){
   vaisselleVide.width = appt.width/20;
   vaisselleVide.height = vaisselle.width;
   vaisselleVide.size = vaisselle.width
 
   vaisselleVide.x = appt.width/2 - 4*shower.size;
   vaisselleVide.y = - appt.height/2 - user.size
-
-  // Teeth Icon
+}
+// POSITION = BATHROOM SINK
+function teethIcon(){
   teeth.width = appt.width/27.5;
   teeth.height = teeth.width;
   teeth.size = teeth.width
 
   teeth.x = appt.width/2.6;
   teeth.y = -appt.height/9;
-
 }
 
 
 
 
 /**
-Description of draw()
+SEQUENCE OF DIFFERENT STATES
+TITLE : white background; mouseX = bg(255,0) to show the title 'ROUTINE'; mouseX > width triggers ROUTINE;
+ROUTINE : map appt; roomates & user keyarrows controlled; talk to roomate triggers GAME;
+  GAME : sequence of tasks to complete (shower,clothes,breakfast,dishes,brush teeth);
+  once brush teeth task completed : triggers WIN;
+WIN : black background; mouseX = bg(0,255) to show the end screen 'have a good day :)'
 */
 function draw() {
   background(bg.fill.r,bg.fill.g,bg.fill.b);
@@ -294,7 +350,7 @@ function backgroundColor() {
 }
 function startRoutine() {
   // Start routine state when background white
-  if (bg.fill.r < 5 & bg.fill.g < 5 & bg.fill.b < 5) {
+  if (mouseX > width) {
     state = `routine`;
   }
 }
@@ -311,12 +367,11 @@ function routine() {
   displaySleepyRoomate(); // Display immobile circle
   displayHungryRoomate(); // Display moving circle
   moveHungryRoomate(); // Automated movement
-  checkCircleOverlap(); // display Hi or yo when roomates touched
-
-  let d = dist(user.x,)
+  checkCircleOverlap(); // display Hi or yo when roomates touched, starts sequence of tasks
   if (circleOverLap) {
     startGame();
   }
+  checkUserDoor(); // TO CODE : to touch to end the game
 }
 function planAppt() {
   // Display plan appartement
@@ -382,7 +437,19 @@ function moveHungryRoomate(){
       hungryRoomate.speed = -hungryRoomate.speed;
     };
   }
+function moveSleepyRoomate(){
+  sleepyRoomate.y -= sleepyRoomate.speed;
+  if(sleepyRoomate.y < 0) {
+    sleepyRoomate.y = 0;
+    sleepyRoomate.x += sleepyRoomate.speed;
+  }
 
+  if(sleepyRoomate.x > -appt.width/15){
+    sleepyRoomate.x = -appt.width/15;
+  }
+}
+
+// Talk & Begin GAME
 function checkCircleOverlap(){
   // Check distance user hungryRoomate
   push();
@@ -401,6 +468,7 @@ function checkCircleOverlap(){
   }
   pop();
 }
+
 // GAME
 function startGame() {
   displayShower();
@@ -410,6 +478,11 @@ function startGame() {
   doDej();
   doVaisselle();
   doTeeth();
+
+  if(endGame){
+    displayDoor();
+  }
+
 }
 // Shower Task
 function displayShower() {
@@ -445,6 +518,7 @@ function doClothes(){
   }
   if(showDej) {
     displayDej();
+    moveSleepyRoomate();
   }
 }
 function clothesDone() {
@@ -518,6 +592,15 @@ function teethDone() {
   teeth.y = - appt.height/2 - user.size;
 }
 
+// TO CODE : GREEN DOOR DISPLAY WHEN TASKS OVER
+function displayDoor(){
+  if(endgame){
+    fill(door.fill.r,door.fill.g,door.fill.b);
+    line(door.x1,door.y1,door.x2,door.y2);
+  }
+}
+
+
 // Talking to Roomates
 function displayHi(){
   // Display 'hi'
@@ -539,6 +622,15 @@ function displayYo(){
   text(`yo`,sleepyRoomate.x,sleepyRoomate.y);
   pop();
 }
+
+// TO CODE : Triggering WIN STATE (touching green door)
+function checkUserDoor(){
+  let d = dist(user.x,user.y,door.x,door.y);
+  if (endGame & d < user.size/2 + door.size/2) {
+    state = `win`;
+  }
+}
+
 
 // STATE WIN
 function win(){
