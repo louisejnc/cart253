@@ -158,7 +158,7 @@ let showTeeth = false;
 
 let endGame = false;
 
-let state = `routine`; // Can be : title, routine, win(have a good day)
+let state = `title`; // Can be : title, routine, win(have a good day)
 /**
 Preload of the appartment map and tasks icons
 */
