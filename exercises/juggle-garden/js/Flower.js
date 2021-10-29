@@ -85,4 +85,9 @@ class Flower {
     this.y = this.y - 5;
   }
 }
+  grow() {
+    this.stemLength = this.stemLength + 0.1;
+    this.y = this.y - 0.1;
+  }
+
 }
