@@ -87,7 +87,68 @@ let appt = {
   width: undefined,
   height: undefined
 }
+let neighborhood = {
+  x:0,
+  y:0,
+  width: undefined,
+  height: undefined
+}
 
+//COLOURED PLACES Icons
+// Home Icon
+let home = {
+  x:0,
+  y:0,
+  width : 0,
+  height : 0,
+  size : 0
+}
+// University Icon
+let univ = {
+  x:0,
+  y:0,
+  width : 0,
+  height : 0,
+  size : 0
+}
+// supermarket Icon
+let supermarket = {
+  x:0,
+  y:0,
+  width : 0,
+  height : 0,
+  size : 0
+}
+
+//BLACK&WHITE PLACES Icons
+// Home Icon
+let homebw = {
+  x:0,
+  y:0,
+  width : 0,
+  height : 0,
+  size : 0
+}
+// University Icon
+let univbw = {
+  x:0,
+  y:0,
+  width : 0,
+  height : 0,
+  size : 0
+}
+// supermarket Icon
+let supermarketbw = {
+  x:0,
+  y:0,
+  width : 0,
+  height : 0,
+  size : 0
+}
+
+
+
+//TASKS ICONS
 // Shower Icon
 let shower = {
   x:0,
@@ -185,15 +246,27 @@ let showTeeth = false; // display TeethBrush Icon when true (triggered by Vaisse
 
 let endGame = false; // trigger the final state 'have a good day :)' when true
 
-let state = `title`; // Can be : title, routine, win(have a good day)
+let state = `navNeighborhood`; // Can be : title, routine, win(have a good day)
 /**
 Preload of the appartment map and tasks icons
 */
 function preload() {
   // plan appt
   appt = loadImage('assets/images/plan_appartement.png');
+  neighborhood = loadImage('assets/images/plan_neighborhood.png');
 
-  // Icons
+  // Places Icons
+  //Colors
+  home = loadImage('assets/images/homeIcon.png');
+  univ = loadImage('assets/images/univIcon.png');
+  supermarket = loadImage('assets/images/supermarketIcon.png');
+  //Black & White
+  homebw = loadImage('assets/images/homeNB.png');
+  univbw = loadImage('assets/images/univNB.png');
+  supermarketbw = loadImage('assets/images/supermarketNB.png');
+
+
+  // Tasks Icons
   shower = loadImage('assets/images/showerIcon.png');
   clothes = loadImage('assets/images/clothesIcon.png');
   dej = loadImage('assets/images/petitdejIcon.png');
@@ -214,13 +287,20 @@ ICONS : positions and sizes of tasks's icons
 */
 function setup() {
   createCanvas(windowWidth/1.05,windowHeight/1.05);
+  setupNeighborhood();
   setupAppt();
   setupBed();
   setupDoor();
   setupUser();
   setupRoomates();
 
-  setupIcons();
+  setupTasksIcons();
+  setupPlacesIcons();
+}
+
+function setupNeighborhood() {
+  neighborhood.width = width/1.1;
+  neighborhood.height = neighborhood.width/1.95;
 }
 function setupAppt() {
   appt.width = width/1.1;
@@ -257,7 +337,7 @@ function setupRoomates(){
   hungryRoomate.x = appt.width/2.7;
   hungryRoomate.y = appt.height/4;
 }
-function setupIcons() {
+function setupTasksIcons() {
   showerIcon();
   clothesIcon();
   dejIcon();
@@ -323,6 +403,48 @@ function teethIcon(){
   teeth.y = -appt.height/9;
 }
 
+function setupPlacesIcons(){
+  colouredIcons();
+  bwIcons();
+}
+
+function colouredIcons() {
+  homeIcon();
+  univIcon();
+  supermarketIcon();
+}
+
+// POSITION & SIZE HOME
+function homeIcon(){
+  home.width = appt.width/25;
+  home.height = home.width;
+  home.size = home.width
+
+  home.x = width/2-appt.width/8.35;
+  home.y = -appt.height/6;
+
+}
+// POSITION & SIZE UNIVERSITY
+function univIcon() {
+  univ.width = appt.width/25;
+  univ.height = univ.width;
+  univ.size = univ.width
+
+  univ.x = width/2-appt.width/8.35;
+  univ.y = -appt.height/6;
+
+}
+// POSITION & SIZE SUPERMARKET
+function supermarketIcon(){
+  supermarket.width = appt.width/25;
+  supermarket.height = supermarket.width;
+  supermarket.size = supermarket.width
+
+  supermarket.x = width/2-appt.width/8.35;
+  supermarket.y = -appt.height/6;
+
+}
+
 
 
 
@@ -340,6 +462,9 @@ function draw() {
 
   if (state === `title`){
     title();
+  }
+  else if (state === `navNeighborhood`){
+    navNeighborhood();
   }
   else if (state === `routine`) {
     routine();
@@ -382,6 +507,43 @@ function startRoutine() {
   }
 }
 
+// NEIGHBORHOOD INTERFACE STATE
+function navNeighborhood(){
+  planNeighborhood();
+  displayColouredPlacesIcons();
+  displayBWPlacesIcons();
+}
+
+function planNeighborhood(){
+  // Display neighborhood map
+  imageMode(CENTER);
+  image(neighborhood,0,0,neighborhood.width,neighborhood.height);
+}
+
+function displayColouredPlacesIcons(){
+  colouredHome();
+  colouredUniv();
+  colouredSupermarket();
+}
+
+function colouredHome(){
+  // Display Home Icon
+  imageMode(CENTER);
+  image(home,home.x,home.y,home.width,home.height);
+}
+function colouredUniv(){
+  // Display Home Icon
+  imageMode(CENTER);
+  image(univ,univ.x,univ.y,univ.width,univ.height);
+}
+function colouredSupermarket(){
+  // Display Home Icon
+  imageMode(CENTER);
+  image(supermarket,supermarket.x,supermarket.y,supermarket.width,supermarket.height);
+}
+
+
+
 // ROUTINE STATE
 function routine() {
   background(bg.fill.r,bg.fill.g,bg.fill.b);
@@ -401,7 +563,7 @@ function routine() {
   checkUserDoor(); // TO CODE : to touch to end the game
 }
 function planAppt() {
-  // Display plan appartement
+  // Display appartement map
   imageMode(CENTER);
   image(appt,0,0,appt.width,appt.height);
 }
