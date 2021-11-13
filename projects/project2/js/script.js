@@ -146,57 +146,21 @@ let supermarketbw = {
   size : 0
 }
 
-
-
 //TASKS ICONS
-// Shower Icon
-let shower = {
-  x:0,
-  y:0,
-  width : 0,
-  height : 0,
-  size : 0
-}
-// Clothes Icon
-let clothes = {
-  x:0,
-  y:0,
-  width : 0,
-  height : 0,
-  size : 0
-}
-// Dej Icon
-let dej = {
-  x:0,
-  y:0,
-  width : 0,
-  height : 0,
-  size : 0
-}
-// Vaisselle Icon
-let vaisselle = {
-  x:0,
-  y:0,
-  width : 0,
-  height : 0,
-  size : 0
-}
-// VaisselleVide Icon
-let vaisselleVide = {
-  x:0,
-  y:0,
-  width : 0,
-  height : 0,
-  size : 0
-}
-// TeethBrush Icon
-let teeth = {
-  x:0,
-  y:0,
-  width : 0,
-  height : 0,
-  size : 0
-}
+// Array of Icons Names
+let tasksIconsNames = [
+  `showerIcon.png`,
+  `clothesIcon.png`,
+  `dejIcon.png`,
+  `vaisselleIcon.png`,
+  `vaisselleVideIcon.png`,
+  `toothbrushIcon.png`,
+];
+// Array of Icons Images
+let tasksIconsPNG = [];
+// Array of Icons Object
+let tasksIcons = [];
+let currentIcon = 0;
 
 // Bed location
 let bed = {
@@ -267,15 +231,12 @@ function preload() {
 
 
   // Tasks Icons
-  shower = loadImage('assets/images/showerIcon.png');
-  clothes = loadImage('assets/images/clothesIcon.png');
-  dej = loadImage('assets/images/petitdejIcon.png');
-  vaisselle = loadImage('assets/images/vaisselleIcontourner.png');
-  vaisselleVide = loadImage('assets/images/vaisselleVideIcon.png')
-  teeth = loadImage('assets/images/brushteethIcon.png');
-
+  for(let i = 0; i < tasksIconsNames.length; i++) {
+    let icon = tasksIconsNames[i];
+    let iconPNG = loadImage('assets/images/'+icon+'.png');
+    tasksIconsPNG.push(iconPNG);
+  }
 }
-
 
 /**
 APPARTMENT MAP : Addapt AppttMapSize to windowSize but keep img ratio
@@ -296,6 +257,9 @@ function setup() {
 
   setupTasksIcons();
   setupPlacesIcons();
+
+
+  for (i = 0)
 }
 
 function setupNeighborhood() {
@@ -338,70 +302,41 @@ function setupRoomates(){
   hungryRoomate.y = appt.height/4;
 }
 function setupTasksIcons() {
-  showerIcon();
-  clothesIcon();
-  dejIcon();
-  vaisselleIcon();
-  vaisselleVideIcon();
-  teethIcon();
+
+// ICONS POSITIONS
+  let iconPosition = [
+    // Shower Icon
+    {
+      x : width/2-appt.width/8.35,
+      y : -appt.height/6 } ,
+    // Clothes Icon
+    {
+      x : appt.width/13,
+      y : appt.height/3.85 } ,
+    // Dej Icon
+    {
+      x : appt.width/2.34,
+      y : appt.height/8.6},
+    // Vaisselle Icon
+    {
+      x : appt.width/3.085,
+      y : appt.height/4.965},
+    // Vaisselle Vide Icon
+    {
+      x : appt.width/3.085,
+      y : appt.height/4.965},
+    // Toothbrush Icon
+    {
+      x : appt.width/2.6,
+      y : -appt.height/9}
+  ]
+
+  for(let i = 0; i < tasksIconsNames.length; i++) {
+    let icon = new Icon(iconsPosition[i].x, iconPosition[i].y,appt.width/25,tasksIconPNG);
+    tasksIcons.push(icon);
+  }
 }
 
-// POSITION = SHOWER
-function showerIcon() {
-  shower.width = appt.width/25;
-  shower.height = shower.width;
-  shower.size = shower.width
-
-  shower.x = width/2-appt.width/8.35;
-  shower.y = -appt.height/6;
-}
-// POSITION = DRESSER
-function clothesIcon() {
-  clothes.width = appt.width/25;
-  clothes.height = clothes.width;
-  clothes.size = clothes.width
-
-  clothes.x = appt.width/13;
-  clothes.y = appt.height/3.85;
-
-}
-// POSITION = FRIDGE
-function dejIcon(){
-  dej.width = appt.width/25;
-  dej.height = dej.width;
-  dej.size = dej.width
-
-  dej.x = appt.width/2.34;
-  dej.y = appt.height/8.6;
-}
-// POSITION = KITCHEN SINK
-function vaisselleIcon(){
-  vaisselle.width = appt.width/20;
-  vaisselle.height = vaisselle.width;
-  vaisselle.size = vaisselle.width
-
-  vaisselle.x = appt.width/3.085;
-  vaisselle.y = appt.height/4.965;
-
-}
-// POSITION = TASK DONE (upper right corner)
-function vaisselleVideIcon(){
-  vaisselleVide.width = appt.width/20;
-  vaisselleVide.height = vaisselle.width;
-  vaisselleVide.size = vaisselle.width
-
-  vaisselleVide.x = appt.width/2 - 4*shower.size;
-  vaisselleVide.y = - appt.height/2 - user.size
-}
-// POSITION = BATHROOM SINK
-function teethIcon(){
-  teeth.width = appt.width/27.5;
-  teeth.height = teeth.width;
-  teeth.size = teeth.width
-
-  teeth.x = appt.width/2.6;
-  teeth.y = -appt.height/9;
-}
 
 function setupPlacesIcons(){
   colouredIcons();
@@ -558,7 +493,7 @@ function routine() {
   moveHungryRoomate(); // Automated movement
   checkCircleOverlap(); // display Hi or yo when roomates touched, starts sequence of tasks
   if (circleOverLap) {
-    startGame();
+    game();
   }
   checkUserDoor(); // TO CODE : to touch to end the game
 }
@@ -661,126 +596,25 @@ function checkCircleOverlap(){
 }
 
 // GAME
-function startGame() {
-  displayShower();
+function game() {
+  tasksIcons[currentIcon].displayed = true;
+  tasksIcons[currentIcon].display();
+  let taskDone = tasksIcons[currentIcon].doTask();
+  if (taskDone) {
+    let x = appt.size.width/2- (currentIcon+1)*taskIcons[currentIcon].size;
+    let y = - appt.height/2 - user.size
+    tasksIcons[currentIcon].done(x,y)
+    currentIcon ++;
+    tasksIcons[currentIcon].displayed = true
+  }
 
-  doShower();
-  doClothes();
-  doDej();
-  doVaisselle();
-  doTeeth();
-
-  if(endGame){
+  if(currentIcon > tasksIcons.length){
     displayDoor();
   }
 
-}
-// Shower Task
-function displayShower() {
-  // Display Shower Icon
-  imageMode(CENTER);
-  image(shower,shower.x,shower.y,shower.width,shower.height);
-}
-function doShower(){
-  let d1 = dist(user.x,user.y,shower.x,shower.y)
-  if(d1 < user.size/2 + shower.size/2) {
-    showerDone();
-    showClothes = true;
-  }
-  if(showClothes) {
-    displayClothes();
-  }
-}
-function showerDone() {
-  shower.x = appt.width/2 - shower.size;
-  shower.y = - appt.height/2 - user.size;
-}
-// Clothes Task
-function displayClothes(){
-  // Display Shower Icon
-  imageMode(CENTER);
-  image(clothes,clothes.x,clothes.y,clothes.width,clothes.height);
-}
-function doClothes(){
-  let d2 = dist(user.x,user.y,clothes.x,clothes.y)
-  if(showClothes & d2 < user.size/2 + clothes.size/2) {
-    clothesDone();
-    showDej = true;
-  }
-  if(showDej) {
-    displayDej();
+  if (currentIcon > 1) {
     moveSleepyRoomate();
   }
-}
-function clothesDone() {
-  clothes.x = appt.width/2 - 2*shower.size;
-  clothes.y = - appt.height/2 - user.size
-}
-// Breakfast Task
-function displayDej(){
-  // Display Shower Icon
-  imageMode(CENTER);
-  image(dej,dej.x,dej.y,dej.width,dej.height);
-}
-function doDej(){
-  let d3 = dist(user.x,user.y,dej.x,dej.y)
-  if(showDej & d3 < user.size/2 + dej.size/2) {
-    dejDone();
-    showVaisselle = true;
-  }
-  if(showVaisselle) {
-    displayVaisselle();
-  }
-}
-function dejDone() {
-  dej.x = appt.width/2 - 3*shower.size;
-  dej.y = - appt.height/2 - user.size
-}
-// Dishes Task
-function displayVaisselle(){
-  // Display Shower Icon
-  imageMode(CENTER);
-  image(vaisselle,vaisselle.x,vaisselle.y,vaisselle.width,vaisselle.height);
-}
-function doVaisselle(){
-  let d4 = dist(user.x,user.y,vaisselle.x,vaisselle.y)
-  if(showVaisselle & d4 < user.size/2 + vaisselle.size/2) {
-    vaisselleDone();
-    showTeeth = true;
-  }
-  if(showTeeth) {
-    displayTeeth();
-    displayVaisselleVide();
-  }
-}
-function vaisselleDone() {
-  showVaisselle = false;
-  showVaisselleVide = true;
-  if(showVaisselleVide) {
-    displayVaisselleVide();
-  }
-}
-function displayVaisselleVide(){
-  // Display Shower Icon
-  imageMode(CENTER);
-  image(vaisselleVide,vaisselleVide.x,vaisselleVide.y,vaisselleVide.width,vaisselleVide.height);
-}
-// Teeth Task
-function displayTeeth(){
-  // Display Shower Icon
-  imageMode(CENTER);
-  image(teeth,teeth.x,teeth.y,teeth.width,teeth.height);
-}
-function doTeeth(){
-  let d5 = dist(user.x,user.y,teeth.x,teeth.y)
-  if(showTeeth & d5 < user.size/2 + teeth.size/2) {
-    teethDone();
-    state = `win`;
-  }
-}
-function teethDone() {
-  teeth.x = appt.width/2 - 5*shower.size;
-  teeth.y = - appt.height/2 - user.size;
 }
 
 // TO CODE : GREEN DOOR DISPLAY WHEN TASKS OVER
